@@ -1,5 +1,5 @@
-import { previewCookie } from "$lib/utils";
 import { getPostBySlug } from "$lib/services/graphcms";
+import { previewCookie } from "$lib/utils";
 import type { RequestHandler } from "@sveltejs/kit";
 
 type GetOutput = {
@@ -7,13 +7,14 @@ type GetOutput = {
 };
 
 export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
-  query,
+  url: { searchParams },
 }) => {
   // Check the secret and slug
   // This secret should only be known to this API route and the CMS
   if (
-    query.get("secret") !== import.meta.env.VITE_GRAPHCMS_PREVIEW_SECRET ||
-    !query.has("slug")
+    searchParams.get("secret") !==
+      import.meta.env.VITE_GRAPHCMS_PREVIEW_SECRET ||
+    !searchParams.has("slug")
   ) {
     return {
       status: 401,
@@ -25,7 +26,7 @@ export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
 
   // Fetch the headless CMS to check if the provided `slug` exists
   // getPostBySlug would implement the required fetching logic to the headless CMS
-  const post = await getPostBySlug(query.get("slug"), true);
+  const post = await getPostBySlug(searchParams.get("slug"), true);
 
   // If the slug doesn't exist prevent preview mode from being enabled
   if (!post) {
