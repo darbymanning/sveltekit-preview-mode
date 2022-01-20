@@ -5,14 +5,12 @@ type GetOutput = {
   message: string;
 };
 
-export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
-  headers: { referer },
-}) => {
+export const get: RequestHandler<unknown, GetOutput> = async () => {
   return {
     status: 307,
     headers: {
       "Set-Cookie": clearPreviewCookie,
-      location: referer,
+      location: "/",
     },
   };
 };

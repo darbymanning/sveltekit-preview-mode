@@ -6,7 +6,7 @@ type GetOutput = {
   message: string;
 };
 
-export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
+export const get: RequestHandler<unknown, GetOutput> = async ({
   url: { searchParams },
 }) => {
   // Check the secret and slug
