@@ -1,6 +1,6 @@
 <div role="dialog">
   This page is a preview.
-  <a rel="external" href="/exit-preview.json">Click here</a>
+  <a rel="external" href="/api/exit-preview">Click here</a>
   to exit preview mode.
 </div>
 

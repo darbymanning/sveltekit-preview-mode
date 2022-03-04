@@ -1,5 +1,5 @@
 import preprocess from "svelte-preprocess";
-import vercel from "@sveltejs/adapter-vercel";
+import adapter from "@sveltejs/adapter-auto";
 import { readFileSync } from "fs";
 
 const pkg = JSON.parse(
@@ -16,12 +16,10 @@ const config = {
     }),
   ],
   kit: {
-    // hydrate the <div id="svelte"> element in src/app.html
-    target: "#svelte",
-    adapter: vercel(),
+    adapter: adapter(),
     vite: {
       define: {
-        ["process.env.REPOSITORY_URL"]: JSON.stringify(pkg.repository.url),
+        ["import.meta.env.REPOSITORY_URL"]: JSON.stringify(pkg.repository.url),
       },
       optimizeDeps: {
         exclude: ["@urql/svelte"],

@@ -1,7 +1,7 @@
 <footer>
   <div class="container">
     <h3>Prerendered with SvelteKit.</h3>
-    <a href={process.env.REPOSITORY_URL}>View on GitHub</a>
+    <a href={import.meta.env.REPOSITORY_URL}>View on GitHub</a>
   </div>
 </footer>
 

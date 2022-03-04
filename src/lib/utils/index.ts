@@ -4,7 +4,7 @@ export const previewCookie = [
   "__preview_mode=true",
   "HttpOnly=true",
   "Path=/",
-  `SameSite=${!isDev ? "none" : "lax"}`,
+  `SameSite="strict"`,
   `Secure=${!isDev}`,
 ].join("; ");
 

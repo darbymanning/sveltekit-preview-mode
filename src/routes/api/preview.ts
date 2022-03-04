@@ -6,14 +6,13 @@ type GetOutput = {
   message: string;
 };
 
-export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
-  query,
-}) => {
+export const get: RequestHandler<unknown, GetOutput> = async ({ url }) => {
   // Check the secret and slug
   // This secret should only be known to this API route and the CMS
   if (
-    query.get("secret") !== import.meta.env.VITE_GRAPHCMS_PREVIEW_SECRET ||
-    !query.has("slug")
+    url.searchParams.get("secret") !==
+      import.meta.env.VITE_GRAPHCMS_PREVIEW_SECRET ||
+    !url.searchParams.has("slug")
   ) {
     return {
       status: 401,
@@ -25,7 +24,7 @@ export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
 
   // Fetch the headless CMS to check if the provided `slug` exists
   // getPostBySlug would implement the required fetching logic to the headless CMS
-  const post = await getPostBySlug(query.get("slug"), true);
+  const post = await getPostBySlug(url.searchParams.get("slug"), true);
 
   // If the slug doesn't exist prevent preview mode from being enabled
   if (!post) {
@@ -43,7 +42,7 @@ export const get: RequestHandler<unknown, unknown, GetOutput> = async ({
       // Enable Preview Mode by setting the cookies
       "Set-Cookie": previewCookie,
       // Redirect to the path from the fetched post
-      // We don't redirect to request.query.slug as that might lead to open redirect vulnerabilities
+      // We don't redirect to request.url.searchParams.get("slug") as that might lead to open redirect vulnerabilities
       location: "/posts/" + post.slug,
     },
   };

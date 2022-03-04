@@ -5,7 +5,7 @@ This example showcases is a proof of concept for CMS Preview Mode with SvelteKit
 ## Demo
 
 - **Live**: [https://sveltekit-preview-mode.vercel.app/](https://sveltekit-preview-mode.vercel.app/)
-- **Preview Mode**: [https://sveltekit-preview-mode.vercel.app/preview.json...](https://sveltekit-preview-mode.vercel.app/preview.json?secret=quiet-as-a-mouse&slug=union-types-and-sortable-relations)
+- **Preview Mode**: [https://sveltekit-preview-mode.vercel.app/api/preview...](https://sveltekit-preview-mode.vercel.app/api/preview?secret=quiet-as-a-mouse&slug=union-types-and-sortable-relations)
 
 ### [https://sveltekit-preview-mode.vercel.app/](https://sveltekit-preview-mode.vercel.app/)
 
@@ -73,7 +73,7 @@ In GraphCMS, go to one of the posts in your project and:
 
 Now, if you go to the post page on localhost, you won't see the updated title. However, if you use **Preview Mode**, you'll be able to see the change.
 
-To view the preview, transform the url to the following format: `http://localhost:3000/preview.json?secret=<YOUR_SECRET_TOKEN>&slug=<SLUG_TO_PREVIEW>` where `<YOUR_SECRET_TOKEN>` is the same secret you defined in the `.env.local` file and `<SLUG_TO_PREVIEW>` is the slug of one of the posts you want to preview.
+To view the preview, transform the url to the following format: `http://localhost:3000/api/preview?secret=<YOUR_SECRET_TOKEN>&slug=<SLUG_TO_PREVIEW>` where `<YOUR_SECRET_TOKEN>` is the same secret you defined in the `.env.local` file and `<SLUG_TO_PREVIEW>` is the slug of one of the posts you want to preview.
 
 You should now be able to see the updated title. To exit the preview mode, you can click on _"Click here to exit preview mode"_ at the top.
 

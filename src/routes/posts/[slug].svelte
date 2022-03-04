@@ -2,8 +2,8 @@
   import type { Load } from "@sveltejs/kit";
   import { getPostAndMorePosts } from "$lib/services/graphcms";
 
-  export const load: Load = async ({ page, session: { preview } }) => {
-    const props = await getPostAndMorePosts(page.params.slug, preview);
+  export const load: Load = async ({ params, session: { preview } }) => {
+    const props = await getPostAndMorePosts(params.slug, preview);
     return { props };
   };
 </script>

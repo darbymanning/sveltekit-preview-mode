@@ -6,7 +6,7 @@ const client = (preview: boolean) => {
     : import.meta.env.VITE_GRAPHCMS_PROD_AUTH_TOKEN;
 
   return createClient({
-    url: import.meta.env.VITE_GRAPHCMS_PROJECT_API as string,
+    url: import.meta.env.VITE_GRAPHCMS_PROJECT_API,
     fetch,
     fetchOptions: () => ({
       headers: { authorization: `Bearer ${token}` },
@@ -29,7 +29,7 @@ export type Author = {
   picture?: { url: string };
 };
 
-export type Posts = Array<Post>;
+export type Posts = Post[];
 
 interface PostAndMorePosts {
   post: Post;
