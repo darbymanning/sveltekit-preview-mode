@@ -1,31 +1,15 @@
-import preprocess from "svelte-preprocess";
-import adapter from "@sveltejs/adapter-auto";
-import { readFileSync } from "fs";
-
-const pkg = JSON.parse(
-  readFileSync(new URL("package.json", import.meta.url), "utf8")
-);
+import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: [
-    preprocess({
-      scss: {
-        includePaths: ["src/lib/"],
-      },
-    }),
-  ],
-  kit: {
-    adapter: adapter(),
-    vite: {
-      define: {
-        ["import.meta.env.REPOSITORY_URL"]: JSON.stringify(pkg.repository.url),
-      },
-      optimizeDeps: {
-        exclude: ["@urql/svelte"],
-      },
-    },
-  },
+	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
+	// for more information about preprocessors
+	preprocess: vitePreprocess(),
+
+	kit: {
+		adapter: adapter()
+	}
 };
 
 export default config;

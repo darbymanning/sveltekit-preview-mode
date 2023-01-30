@@ -1,22 +1,12 @@
-/// <reference types="@sveltejs/kit" />
-
-// See https://kit.svelte.dev/docs/types#the-app-namespace
+// See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-declare namespace App {
-  // interface Locals {}
-
-  // interface Platform {}
-
-  interface Session {
-    preview: boolean;
-  }
-
-  // interface Stuff {}
+declare global {
+	namespace App {
+		// interface Error {}
+		// interface Locals {}
+		// interface PageData {}
+		// interface Platform {}
+	}
 }
 
-interface ImportMetaEnv {
-  readonly REPOSITORY_URL: string;
-  readonly VITE_GRAPHCMS_DEV_AUTH_TOKEN: string;
-  readonly VITE_GRAPHCMS_PROD_AUTH_TOKEN: string;
-  readonly VITE_GRAPHCMS_PROJECT_API: string;
-}
+export {};
