@@ -8,6 +8,9 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
+		alias: {
+			'preview-mode': './src/lib/preview-mode'
+		},
 		adapter: adapter()
 	}
 };
