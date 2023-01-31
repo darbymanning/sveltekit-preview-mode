@@ -2,9 +2,7 @@ import type { CMS } from '$lib/cms';
 
 import { createClient, gql } from '@urql/svelte';
 import { env } from '$env/dynamic/private';
-
-// TODO: Remove this when we have a proper preview mode
-const preview = false;
+import { isPreview } from 'preview-mode';
 
 const client = () => {
 	return createClient({
@@ -13,7 +11,7 @@ const client = () => {
 		fetchOptions: () => ({
 			headers: {
 				authorization: `Bearer ${
-					preview ? env.HYGRAPH_DEV_AUTH_TOKEN : env.HYGRAPH_PROD_AUTH_TOKEN
+					isPreview() ? env.HYGRAPH_DEV_AUTH_TOKEN : env.HYGRAPH_PROD_AUTH_TOKEN
 				}`
 			}
 		})
@@ -85,7 +83,7 @@ export const get_post_and_more_posts = async (slug: string): Promise<PostAndMore
 
 	const variables = {
 		slug,
-		stage: preview ? 'DRAFT' : 'PUBLISHED'
+		stage: isPreview() ? 'DRAFT' : 'PUBLISHED'
 	};
 
 	const req = await client().query(QUERY, variables).toPromise();
@@ -105,7 +103,7 @@ export const get_posts = async (): Promise<Post[]> => {
 	`;
 
 	const variables = {
-		stage: preview ? 'DRAFT' : 'PUBLISHED'
+		stage: isPreview() ? 'DRAFT' : 'PUBLISHED'
 	};
 
 	const req = await client().query(QUERY, variables).toPromise();

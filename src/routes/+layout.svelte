@@ -1,3 +1,9 @@
+<script lang="ts">
+	import { PreviewBanner } from 'preview-mode';
+</script>
+
+<PreviewBanner />
+
 <main>
 	<slot />
 </main>
