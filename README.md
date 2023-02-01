@@ -108,5 +108,3 @@ This project is inspired by the Vercel Next.js team's approach in providing [Pre
 ## License
 
 SvelteKit Preview Mode is released under the [ISC License](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/LICENSE).
-
-https://sveltekit-preview-mode.vercel.app/?secret=quiet-as-a-mouse
