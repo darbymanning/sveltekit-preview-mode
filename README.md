@@ -1,38 +1,108 @@
-# create-svelte
+# SvelteKit Preview Mode
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+SvelteKit Preview Mode is a library for [SvelteKit](https://svelte.dev/docs#sveltekit) that helps you easily enable preview mode for content management systems (CMSs). With this library, you can preview draft or unpublished content without any hassle. This is intended to be a SvelteKit equivelant of the [Next.js Preview Mode](https://nextjs.org/docs/advanced-features/preview-mode).
 
-## Creating a project
+## Demo (using Hygraph)
 
-If you're seeing this, you've probably already done this step. Congrats!
+- [Live](https://sveltekit-preview-mode.vercel.app/)
+- [Preview Mode](https://sveltekit-preview-mode.vercel.app/?secret=quiet-as-a-mouse)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Installation
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To install SvelteKit Preview Mode, run the following command:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm add sveltekit-preview-mode -D
 ```
 
-## Building
+## Usage
 
-To create a production version of your app:
+To use SvelteKit Preview Mode, simply import it in your SvelteKit application:
 
-```bash
-npm run build
+```ts
+// 📁 src/hooks.server.ts
+import type { Handle } from "@sveltejs/kit";
+import { env } from "$env/dynamic/private";
+import previewMode from "sveltekit-preview-mode";
+
+export const handle: Handle = previewMode({
+  previewSecret: env.PREVIEW_SECRET,
+});
 ```
 
-You can preview the production build with `npm run preview`.
+Don't forget to set the `PREVIEW_SECRET` [environment variable](https://kit.svelte.dev/docs/modules#$env-dynamic-private). This can be any string you'd like.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+In order to share the preview status in the client, you'll need to add this to `+layout.server.ts`:
+
+```ts
+// 📁 src/routes/+layout.server.ts
+import { setPreview } from "sveltekit-preview-mode";
+import type { LayoutServerLoad } from "./$types";
+
+export const load: LayoutServerLoad = ({ locals: { exitPreviewQueryParam, isPreview } }) => {
+  setPreview(isPreview);
+
+  return {
+    exitPreviewQueryParam,
+    isPreview,
+  };
+};
+```
+
+And finally, to display a banner when preview mode is enabled, import the `PreviewMode` banner component into `+layout.svelte`:
+
+```svelte
+<script lang="ts">
+  import { PreviewBanner } from "sveltekit-preview-mode";
+</script>
+
+<PreviewBanner />
+```
+
+In any server file, you can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status. Note this value does not get updated in the client). [See an example using Hygraph](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/apps/example/src/lib/cms/hygraph.ts).
+
+### Enabling Preview Mode
+
+To enable preview mode, add the query parameter `?secret=PREVIEW_SECRET` to any route. This will then check for a matching secret, and update the `isPreview` value, and set a cookie to securely persist preview mode between sessions.
+
+### Disabling Preview Mode
+
+To disable preview mode, add the query paramter `?exit-preview` to any route. This will then update the `isPreview` value, and update the cookie value.
+
+## Examples
+
+- [Hygraph](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/apps/example/src/lib/cms/hygraph.ts)
+
+## Options
+
+The `previewMode` handle function has a few options that can be set:
+
+```ts
+interface PreviewModeOptions {
+  previewSecret: string;
+  cookieName?: string;
+  cookieOpts?: CookieSerializeOptions;
+  exitPreviewQueryParam?: string;
+  secretTokenQueryParam?: string;
+}
+```
+
+| Key                        | Type     | Default                                                                                                                                                     | Description                                                                                                                    |
+| -------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| `previewSecret` (required) | `string` | N/A                                                                                                                                                         | This is the query parameter value, which needs to match in order to enable preview mode.                                       |
+| `cookieName`               | `string` | `__preview_mode`                                                                                                                                            | The name of the cookie that is created to store the preview mode state.                                                        |
+| `cookieOpts`               | `string` | [CookieSerializeOptions](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/98fc6ab64752d9227eeb75b0b5a6f645b1db587b/types/cookie/index.d.ts#L14-L111) | [🔗](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/packages/sveltekit-preview-mode/src/lib/index.ts#L32-38) | Options for the cookie we create. |
+| `exitPreviewQueryParam`    | `string` | `exit-preview`                                                                                                                                              | The query param that should be present to exit preview mode.                                                                   |
+| `secretTokenQueryParam`    | `string` | `secret`                                                                                                                                                    | The query param that should be used to enter preview mode.                                                                     |
+
+## Contributing
+
+If you'd like to contribute to SvelteKit Preview Mode, feel free to open an issue or pull request on our [GitHub repository](https://github.com/darbymanning/sveltekit-preview-mode).
+
+## Credits
+
+This project is inspired by the Vercel Next.js team's approach in providing [Preview Mode functionality](https://nextjs.org/docs/advanced-features/preview-mode). Thanks for their hard work! 🖤
+
+## License
+
+SvelteKit Preview Mode is released under the [ISC License](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/LICENSE).
