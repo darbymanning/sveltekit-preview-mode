@@ -20,7 +20,7 @@ pnpm add sveltekit-preview-mode -D
 To use SvelteKit Preview Mode, simply import it in your SvelteKit application:
 
 ```ts
-// 📁 src/hooks.server.ts
+// src/hooks.server.ts
 import type { Handle } from "@sveltejs/kit";
 import { env } from "$env/dynamic/private";
 import previewMode from "sveltekit-preview-mode";
@@ -35,7 +35,7 @@ Don't forget to set the `PREVIEW_SECRET` [environment variable](https://kit.svel
 In order to share the preview status in the client, you'll need to add this to `+layout.server.ts`:
 
 ```ts
-// 📁 src/routes/+layout.server.ts
+// src/routes/+layout.server.ts
 import { setPreview } from "sveltekit-preview-mode";
 import type { LayoutServerLoad } from "./$types";
 
@@ -52,6 +52,7 @@ export const load: LayoutServerLoad = ({ locals: { exitPreviewQueryParam, isPrev
 And finally, to display a banner when preview mode is enabled, import the `PreviewMode` banner component into `+layout.svelte`:
 
 ```svelte
+<!-- src/routes/+layout.svelte -->
 <script lang="ts">
   import { PreviewBanner } from "sveltekit-preview-mode";
 </script>
@@ -107,3 +108,5 @@ This project is inspired by the Vercel Next.js team's approach in providing [Pre
 ## License
 
 SvelteKit Preview Mode is released under the [ISC License](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/LICENSE).
+
+https://sveltekit-preview-mode.vercel.app/?secret=quiet-as-a-mouse
