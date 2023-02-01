@@ -49,6 +49,7 @@ importers:
       '@types/cookie': ^0.5.1
       svelte: ^3.55.1
       svelte-check: ^2.7.1
+      svelte-preprocess: ^4.10.6
       tslib: ^2.3.1
       typescript: ^4.9.4
       vite: ^4.0.0
@@ -60,6 +61,7 @@ importers:
       '@types/cookie': 0.5.1
       svelte: 3.55.1
       svelte-check: 2.9.2_svelte@3.55.1
+      svelte-preprocess: 4.10.7_4x7phaipmicbaooxtnresslofa
       tslib: 2.4.1
       typescript: 4.9.5
       vite: 4.0.0

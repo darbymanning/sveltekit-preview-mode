@@ -1,17 +1,13 @@
-<script lang="ts">
-  import { slide } from "svelte/transition";
-  import { page } from "$app/stores";
-  import { onMount } from "svelte";
-
-  let show_preview = false;
-  let exit_link: string;
-
-  $: {
+<script>import { slide } from "svelte/transition";
+import { page } from "$app/stores";
+import { onMount } from "svelte";
+let show_preview = false;
+let exit_link;
+$: {
     $page.url.searchParams.set($page.data.exitPreviewQueryParam, "true");
     exit_link = $page.url.toString();
-  }
-
-  onMount(() => (show_preview = $page.data.isPreview));
+}
+onMount(() => (show_preview = $page.data.isPreview));
 </script>
 
 {#if show_preview}
