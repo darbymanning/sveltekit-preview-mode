@@ -11,7 +11,7 @@ import previewMode from "sveltekit-preview-mode";
  *
  * If you need to add additional handlers, you can do so using the sequence helper function.
  *
- * @see https://kit.svelte.dev/docs/modules#sveltejs-kit-hooks
+ * @see https://kit.svelte.dev/docs/modules#sveltejs-kit-hooks-sequence
  */
 export const handle: Handle = previewMode({
   previewSecret: env.PREVIEW_SECRET,
