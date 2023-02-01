@@ -1,88 +1,108 @@
-# A prerenered blog example using SvelteKit and GraphCMS
+# SvelteKit Preview Mode
 
-This example showcases is a proof of concept for CMS Preview Mode with SvelteKit, using [GraphCMS](https://www.graphcms.com/) as the data source. This is intended to be a Svelte equivelant of the [Next.js Preview Mode](https://nextjs.org/docs/advanced-features/preview-mode).
+SvelteKit Preview Mode is a library for [SvelteKit](https://svelte.dev/docs#sveltekit) that helps you easily enable preview mode for content management systems (CMSs). With this library, you can preview draft or unpublished content without any hassle. This is intended to be a SvelteKit equivelant of the [Next.js Preview Mode](https://nextjs.org/docs/advanced-features/preview-mode).
 
-## Demo
+## Demo (using Hygraph)
 
-- **Live**: [https://sveltekit-preview-mode.vercel.app/](https://sveltekit-preview-mode.vercel.app/)
-- **Preview Mode**: [https://sveltekit-preview-mode.vercel.app/api/preview...](https://sveltekit-preview-mode.vercel.app/api/preview?secret=quiet-as-a-mouse&slug=union-types-and-sortable-relations)
+- [Live](https://sveltekit-preview-mode.vercel.app/)
+- [Preview Mode](https://sveltekit-preview-mode.vercel.app/?secret=quiet-as-a-mouse)
 
-### [https://sveltekit-preview-mode.vercel.app/](https://sveltekit-preview-mode.vercel.app/)
+## Installation
 
-## Deploy your own
-
-Once you have access to [the environment variables you'll need](#step-3-set-up-environment-variables), deploy the example using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/darbymanning/sveltekit-preview-mode&project-name=sveltekit-preview-mode&repository-name=sveltekit-preview-mode&env=VITE_GRAPHCMS_PROJECT_API,VITE_GRAPHCMS_PROD_AUTH_TOKEN,VITE_GRAPHCMS_DEV_AUTH_TOKEN,VITE_GRAPHCMS_PREVIEW_SECRET&envDescription=Required%20to%20connect%20the%20app%20with%20GraphCMS&envLink=https://github.com/darbymanning/sveltekit-preview-mode#step-3-set-up-environment-variables)
-
-## How to use
-
-Clone this repository.
+To install SvelteKit Preview Mode, run the following command:
 
 ```bash
-$ git clone https://github.com/darbymanning/sveltekit-preview-mode
+pnpm add sveltekit-preview-mode -D
 ```
 
-## Configuration
+## Usage
 
-### Step 1. Create an account and a project in GraphCMS
+To use SvelteKit Preview Mode, simply import it in your SvelteKit application:
 
-First, [create an account in GraphCMS](https://app.graphcms.com).
+```ts
+// 📁 src/hooks.server.ts
+import type { Handle } from "@sveltejs/kit";
+import { env } from "$env/dynamic/private";
+import previewMode from "sveltekit-preview-mode";
 
-### Step 2. Create a new GraphCMS project
-
-After creating an account, create a new project from the **Blog Starter template** - be sure to include the example content.
-
-### Step 3. Set up environment variables
-
-Copy the `.env.local.example` file in this directory to `.env.local` (which will be ignored by Git):
-
-```bash
-cp .env.local.example .env.local
+export const handle: Handle = previewMode({
+  previewSecret: env.PREVIEW_SECRET,
+});
 ```
 
-Inside your project dashboard, navigate to **Settings > API Access page**.
+Don't forget to set the `PREVIEW_SECRET` [environment variable](https://kit.svelte.dev/docs/modules#$env-dynamic-private). This can be any string you'd like.
 
-Then set each variable in `.env.local`:
+In order to share the preview status in the client, you'll need to add this to `+layout.server.ts`:
 
-- `VITE_GRAPHCMS_PROJECT_API`: Set it to the API endpoint under **Endpoints**, at the top of the page.
-- `VITE_GRAPHCMS_PROD_AUTH_TOKEN`: Copy the `NEXT_EXAMPLE_CMS_GCMS_PROD_AUTH_TOKEN` token under **Existing tokens**, at the bottom of the page. This will only query content that is published.
-- `VITE_GRAPHCMS_DEV_AUTH_TOKEN`: Copy the `NEXT_EXAMPLE_CMS_GCMS_DEV_AUTH_TOKEN` token under **Existing tokens**, at the bottom of the page. This will only query content that is in draft.
-- `VITE_GRAPHCMS_PREVIEW_SECRET` can be any random string (but avoid spaces), like `MY_SECRET` - this is used for Preivew Mode.
+```ts
+// 📁 src/routes/+layout.server.ts
+import { setPreview } from "sveltekit-preview-mode";
+import type { LayoutServerLoad } from "./$types";
 
-### Step 4. Run SvelteKit in development mode
+export const load: LayoutServerLoad = ({ locals: { exitPreviewQueryParam, isPreview } }) => {
+  setPreview(isPreview);
 
-```bash
-npm install
-npm run dev
-
-# or
-
-yarn
-yarn dev
+  return {
+    exitPreviewQueryParam,
+    isPreview,
+  };
+};
 ```
 
-Your blog should be up and running on [http://localhost:3000](http://localhost:3000)!
+And finally, to display a banner when preview mode is enabled, import the `PreviewMode` banner component into `+layout.svelte`:
 
-### Step 5. Try preview mode
+```svelte
+<script lang="ts">
+  import { PreviewBanner } from "sveltekit-preview-mode";
+</script>
 
-In GraphCMS, go to one of the posts in your project and:
+<PreviewBanner />
+```
 
-- **Update the title**. For example, you can add `[Draft]` in front of the title.
-- After you edit the document save the article as a draft, but **DO NOT** click **Publish**. By doing this, the post will be in the draft stage.
+In any server file, you can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status. Note this value does not get updated in the client). [See an example using Hygraph](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/apps/example/src/lib/cms/hygraph.ts).
 
-Now, if you go to the post page on localhost, you won't see the updated title. However, if you use **Preview Mode**, you'll be able to see the change.
+### Enabling Preview Mode
 
-To view the preview, transform the url to the following format: `http://localhost:3000/api/preview?secret=<YOUR_SECRET_TOKEN>&slug=<SLUG_TO_PREVIEW>` where `<YOUR_SECRET_TOKEN>` is the same secret you defined in the `.env.local` file and `<SLUG_TO_PREVIEW>` is the slug of one of the posts you want to preview.
+To enable preview mode, add the query parameter `?secret=PREVIEW_SECRET` to any route. This will then check for a matching secret, and update the `isPreview` value, and set a cookie to securely persist preview mode between sessions.
 
-You should now be able to see the updated title. To exit the preview mode, you can click on _"Click here to exit preview mode"_ at the top.
+### Disabling Preview Mode
 
-### Step 6. Deploy on Vercel
+To disable preview mode, add the query paramter `?exit-preview` to any route. This will then update the `isPreview` value, and update the cookie value.
 
-You can deploy this app to the cloud with [Vercel](https://vercel.com) as it is setup to use the vercel adapter. Other providers with the appropriate adapter supporting endpoints should work aswell (ie. Netlify).
+## Examples
 
-#### Deploy from Our Template
+- [Hygraph](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/apps/example/src/lib/cms/hygraph.ts)
 
-Alternatively, you can deploy using our template by clicking on the Deploy button below.
+## Options
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/darbymanning/sveltekit-preview-mode&project-name=sveltekit-preview-mode&repository-name=sveltekit-preview-mode&env=VITE_GRAPHCMS_PROJECT_API,VITE_GRAPHCMS_PROD_AUTH_TOKEN,VITE_GRAPHCMS_DEV_AUTH_TOKEN,VITE_GRAPHCMS_PREVIEW_SECRET&envDescription=Required%20to%20connect%20the%20app%20with%20GraphCMS&envLink=https://github.com/darbymanning/sveltekit-preview-mode#step-3-set-up-environment-variables)
+The `previewMode` handle function has a few options that can be set:
+
+```ts
+interface PreviewModeOptions {
+  previewSecret: string;
+  cookieName?: string;
+  cookieOpts?: CookieSerializeOptions;
+  exitPreviewQueryParam?: string;
+  secretTokenQueryParam?: string;
+}
+```
+
+| Key                        | Type     | Default                                                                                                                                                     | Description                                                                                                                    |
+| -------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| `previewSecret` (required) | `string` | N/A                                                                                                                                                         | This is the query parameter value, which needs to match in order to enable preview mode.                                       |
+| `cookieName`               | `string` | `__preview_mode`                                                                                                                                            | The name of the cookie that is created to store the preview mode state.                                                        |
+| `cookieOpts`               | `string` | [CookieSerializeOptions](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/98fc6ab64752d9227eeb75b0b5a6f645b1db587b/types/cookie/index.d.ts#L14-L111) | [🔗](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/packages/sveltekit-preview-mode/src/lib/index.ts#L32-38) | Options for the cookie we create. |
+| `exitPreviewQueryParam`    | `string` | `exit-preview`                                                                                                                                              | The query param that should be present to exit preview mode.                                                                   |
+| `secretTokenQueryParam`    | `string` | `secret`                                                                                                                                                    | The query param that should be used to enter preview mode.                                                                     |
+
+## Contributing
+
+If you'd like to contribute to SvelteKit Preview Mode, feel free to open an issue or pull request on our [GitHub repository](https://github.com/darbymanning/sveltekit-preview-mode).
+
+## Credits
+
+This project is inspired by the Vercel Next.js team's approach in providing [Preview Mode functionality](https://nextjs.org/docs/advanced-features/preview-mode). Thanks for their hard work! 🖤
+
+## License
+
+SvelteKit Preview Mode is released under the [ISC License](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/LICENSE).
