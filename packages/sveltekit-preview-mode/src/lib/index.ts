@@ -62,7 +62,7 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
       });
     }
 
-    if (has_preview_cookie || secret_matches) {
+    if (has_preview_cookie || secret_matches || isPreview()) {
       setPreview(true);
       event.locals.isPreview = true;
 
