@@ -1,6 +1,6 @@
 {
   "name": "sveltekit-preview-mode",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CMS Preview Mode for SvelteKit",
   "repository": "https://github.com/darbymanning/sveltekit-preview-mode.git",
   "author": "Darby Manning <me@darbymanning.com>",
@@ -16,7 +16,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "svelte-package -w",
-    "build": "svelte-package",
+    "build": "vite build && svelte-package",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
