@@ -1,0 +1,39 @@
+{
+  "name": "sveltekit-preview-mode",
+  "version": "0.1.0",
+  "description": "CMS Preview Mode for SvelteKit",
+  "repository": "https://github.com/darbymanning/sveltekit-preview-mode.git",
+  "author": "Darby Manning <me@darbymanning.com>",
+  "keywords": [
+    "svelte",
+    "sveltekit",
+    "cms",
+    "preview",
+    "mode",
+    "hygraph"
+  ],
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "svelte-package -w",
+    "clean": "rm -rf client.* index.* package",
+    "build": "pnpm clean && pnpm check && svelte-package && node ./scripts/postbuild.js && rm -rf package",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test:unit": "vitest"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "latest",
+    "@sveltejs/kit": "latest",
+    "@sveltejs/package": "^1.0.2",
+    "@types/cookie": "^0.5.1",
+    "svelte": "^3.55.1",
+    "svelte-check": "^2.7.1",
+    "svelte-preprocess": "^4.10.6",
+    "tslib": "^2.3.1",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.0",
+    "vitest": "^0.28.3"
+  }
+}

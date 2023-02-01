@@ -1,10 +1,36 @@
-.DS_Store
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
 node_modules
-/build
-/.svelte-kit
-/package
+.pnp
+.pnp.js
+
+# testing
+coverage
+
+# svelte
+.svelte-kit
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
 .env
 .env.*
 !.env.example
+
+# turbo
+.turbo
+
+# vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# generated files
+packages/sveltekit-preview-mode/index.*
