@@ -33,4 +33,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # generated files
-packages/sveltekit-preview-mode/index.*
+packages/*/package
