@@ -1,6 +1,6 @@
 {
   "name": "sveltekit-preview-mode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CMS Preview Mode for SvelteKit",
   "repository": "https://github.com/darbymanning/sveltekit-preview-mode.git",
   "author": "Darby Manning <me@darbymanning.com>",
