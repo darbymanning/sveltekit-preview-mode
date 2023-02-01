@@ -30,7 +30,7 @@ export const handle: Handle = previewMode({
 });
 ```
 
-Don't forget to set the `PREVIEW_SECRET` [environment variable](https://kit.svelte.dev/docs/modules#$env-dynamic-private). This can be any string you'd like.
+Don't forget to set the `PREVIEW_SECRET` [environment variable](https://kit.svelte.dev/docs/modules#$env-dynamic-private). This can be any string you'd like. If you need to add additional handlers, you can do so using the [sequence helper function](https://kit.svelte.dev/docs/modules#sveltejs-kit-hooks-sequence).
 
 In order to share the preview status in the client, you'll need to add this to `+layout.server.ts`:
 
@@ -68,7 +68,7 @@ To enable preview mode, add the query parameter `?secret=PREVIEW_SECRET` to any 
 
 ### Disabling Preview Mode
 
-To disable preview mode, add the query paramter `?exit-preview` to any route. This will then update the `isPreview` value, and update the cookie value.
+To disable preview mode, add the query parameter `?exit-preview` to any route. This will then update the `isPreview` value, and update the cookie value.
 
 ## Examples
 
