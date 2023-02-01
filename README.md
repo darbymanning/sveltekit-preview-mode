@@ -91,11 +91,11 @@ interface PreviewModeOptions {
 <!-- prettier-ignore -->
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| `previewSecret` (required) | `string` | N/A | This is the query parameter value, which needs to match in order to enable preview mode. |
-| `cookieName` | `string` | `__preview_mode` | The name of the cookie that is created to store the preview mode state. |
-| `cookieOpts` | `string` | [CookieSerializeOptions](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/98fc6ab64752d9227eeb75b0b5a6f645b1db587b/types/cookie/index.d.ts#L14-L111) | [🔗](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/packages/sveltekit-preview-mode/src/lib/index.ts#L32-L38) | Options for the cookie we create. |
-| `exitPreviewQueryParam` | `string` | `exit-preview` | The query param that should be present to exit preview mode. |
-| `secretTokenQueryParam` | `string` | `secret` | The query param that should be used to enter preview mode. |
+| `previewSecret` | `string` | N/A | This is the query parameter value, which needs to match in order to enable preview mode. |
+| `cookieName?` | `string` | `__preview_mode` | The name of the cookie that is created to store the preview mode state. |
+| `cookieOpts?` | [CookieSerializeOptions](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/98fc6ab64752d9227eeb75b0b5a6f645b1db587b/types/cookie/index.d.ts#L14-L111) | [🔗](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/packages/sveltekit-preview-mode/src/lib/index.ts#L32-L38) | Options for the cookie we create. |
+| `exitPreviewQueryParam?` | `string` | `exit-preview` | The query param that should be present to exit preview mode. |
+| `secretTokenQueryParam?` | `string` | `secret` | The query param that should be used to enter preview mode. |
 
 ## Contributing
 
