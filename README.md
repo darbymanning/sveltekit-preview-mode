@@ -36,20 +36,37 @@ In order to share the preview status in the client, you'll need to add this to `
 
 ```ts
 // src/routes/+layout.server.ts
-import { setPreview } from "sveltekit-preview-mode";
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = ({ locals: { exitPreviewQueryParam, isPreview } }) => {
-  setPreview(isPreview);
-
+/**
+ * Return the `exitPreviewQueryParam` and `isPreview` values so that they can be referenced in client-side code.
+ */
+export const load = (({ locals: { exitPreviewQueryParam, isPreview } }) => {
   return {
     exitPreviewQueryParam,
     isPreview,
   };
-};
+}) satisfies LayoutServerLoad;
 ```
 
-And finally, to display a banner when preview mode is enabled, import the `PreviewMode` banner component into `+layout.svelte`:
+And then in `+layout.ts` we need to update the store to hold the preview status:
+
+```ts
+// src/routes/+layout.ts
+import { setPreview } from "sveltekit-preview-mode";
+import type { LayoutLoad } from "./$types";
+
+/**
+ * Call `setPreview` with the `isPreview` value so that the `isPreview` value can be referenced in client-side code.
+ */
+export const load = (({ data: { isPreview } }) => {
+  setPreview(isPreview);
+}) satisfies LayoutLoad;
+```
+
+### Displaying Preview Status
+
+To display a banner when preview mode is enabled, import the `PreviewMode` banner component into `+layout.svelte`:
 
 ```svelte
 <!-- src/routes/+layout.svelte -->
@@ -60,7 +77,7 @@ And finally, to display a banner when preview mode is enabled, import the `Previ
 <PreviewBanner />
 ```
 
-In any server file, you can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status. Note this value does not get updated in the client).
+You can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status.
 
 ### Enabling Preview Mode
 
