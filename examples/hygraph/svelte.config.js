@@ -8,6 +8,7 @@ const config = {
   preprocess: preprocess(),
 
   kit: {
+    // Not required in the real world, but allows us to use the local uncompiled version of the package
     alias: {
       "sveltekit-preview-mode": "../../packages/sveltekit-preview-mode/src/lib",
     },

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PreviewBanner } from 'sveltekit-preview-mode';
+  import { PreviewBanner } from "sveltekit-preview-mode";
 </script>
 
 <PreviewBanner />
@@ -11,7 +11,11 @@
 <footer>
   <div class="container">
     <h3>Prerendered with SvelteKit.</h3>
-    <a href="https://github.com/darbymanning/sveltekit-preview-mode" rel="noreferrer" target="_blank">
+    <a
+      href="https://github.com/darbymanning/sveltekit-preview-mode"
+      rel="noreferrer"
+      target="_blank"
+    >
       View on GitHub
     </a>
   </div>

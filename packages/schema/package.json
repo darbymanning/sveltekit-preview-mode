@@ -1,0 +1,4 @@
+{
+  "name": "schema",
+  "main": "./index.ts"
+}

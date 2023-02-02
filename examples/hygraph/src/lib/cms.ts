@@ -1,8 +1,7 @@
 import { createClient, gql } from "@urql/svelte";
 import { env } from "$env/dynamic/private";
-
-// TODO: Remove this when we have a proper preview mode
-const preview = false;
+import { isPreview } from "sveltekit-preview-mode";
+import type { Post, PostAndMorePosts } from "schema";
 
 const client = () => {
   return createClient({
@@ -11,32 +10,12 @@ const client = () => {
     fetchOptions: () => ({
       headers: {
         authorization: `Bearer ${
-          preview ? env.HYGRAPH_DEV_AUTH_TOKEN : env.HYGRAPH_PROD_AUTH_TOKEN
+          isPreview() ? env.HYGRAPH_DEV_AUTH_TOKEN : env.HYGRAPH_PROD_AUTH_TOKEN
         }`,
       },
     }),
   });
 };
-
-type Post = {
-  author?: Author;
-  content: { html: string };
-  cover_image?: { url: string };
-  date?: string;
-  excerpt: string;
-  slug: string;
-  title: string;
-};
-
-type Author = {
-  name: string;
-  picture?: { url: string };
-};
-
-interface PostAndMorePosts {
-  post: Post;
-  more_posts: Post[];
-}
 
 const AuthorFragment = gql`
   fragment AuthorFragment on Author {
@@ -83,7 +62,7 @@ export const get_post_and_more_posts = async (slug: string): Promise<PostAndMore
 
   const variables = {
     slug,
-    stage: preview ? "DRAFT" : "PUBLISHED",
+    stage: isPreview() ? "DRAFT" : "PUBLISHED",
   };
 
   const req = await client().query(QUERY, variables).toPromise();
@@ -91,7 +70,7 @@ export const get_post_and_more_posts = async (slug: string): Promise<PostAndMore
   return req.data;
 };
 
-export const get_post = async (): Promise<{ posts: Post[] }> => {
+export const get_posts = async (): Promise<Post[]> => {
   const QUERY = gql`
     query Posts($stage: Stage!) {
       posts(stage: $stage) {
@@ -103,10 +82,15 @@ export const get_post = async (): Promise<{ posts: Post[] }> => {
   `;
 
   const variables = {
-    stage: preview ? "DRAFT" : "PUBLISHED",
+    stage: isPreview() ? "DRAFT" : "PUBLISHED",
   };
 
   const req = await client().query(QUERY, variables).toPromise();
 
-  return req.data;
+  return req.data.posts;
+};
+
+export default {
+  get_post_and_more_posts,
+  get_posts,
 };
