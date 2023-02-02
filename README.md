@@ -60,7 +60,7 @@ And finally, to display a banner when preview mode is enabled, import the `Previ
 <PreviewBanner />
 ```
 
-In any server file, you can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status. Note this value does not get updated in the client). [See an example using Hygraph](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/examples/hygraph/src/lib/cms.ts).
+In any server file, you can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status. Note this value does not get updated in the client).
 
 ### Enabling Preview Mode
 
@@ -73,6 +73,7 @@ To disable preview mode, add the query parameter `?exit-preview` to any route. T
 ## Examples
 
 - [Hygraph](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/examples/hygraph)
+- [Contentful](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/examples/contentful)
 
 ## Options
 
