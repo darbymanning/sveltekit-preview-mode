@@ -7,10 +7,10 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "prettier": "^2.7.1",
-    "prettier-plugin-svelte": "^2.7.0",
-    "turbo": "latest"
+    "eslint": "^8.48.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "turbo": "^1.10.13"
   },
   "packageManager": "pnpm@7.15.0",
   "license": "ICS"

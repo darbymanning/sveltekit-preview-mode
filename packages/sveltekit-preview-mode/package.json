@@ -1,6 +1,6 @@
 {
   "name": "sveltekit-preview-mode",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "CMS Preview Mode for SvelteKit",
   "repository": "https://github.com/darbymanning/sveltekit-preview-mode.git",
   "author": "Darby Manning <me@darbymanning.com>",
@@ -22,17 +22,30 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test:unit": "vitest"
   },
+  "dependencies": {
+    "@sveltejs/kit": ">=1.0.0",
+    "svelte": ">=3.0.0"
+  },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "latest",
+    "@sveltejs/adapter-vercel": "^3.0.3",
     "@sveltejs/kit": "latest",
-    "@sveltejs/package": "^1.0.2",
-    "@types/cookie": "^0.5.1",
-    "svelte": "^3.55.1",
-    "svelte-check": "^2.7.1",
-    "svelte-preprocess": "^4.10.6",
-    "tslib": "^2.3.1",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.0",
-    "vitest": "^0.28.3"
-  }
+    "@sveltejs/package": "^2.2.2",
+    "@sveltejs/vite-plugin-svelte": "^2.4.5",
+    "@types/cookie": "^0.5.2",
+    "svelte": "^4.2.0",
+    "svelte-check": "^3.5.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ]
 }

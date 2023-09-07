@@ -34,3 +34,4 @@ vite.config.ts.timestamp-*
 
 # generated files
 packages/*/package
+packages/*/dist
