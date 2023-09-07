@@ -1,50 +1,64 @@
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import type { Document } from "@contentful/rich-text-types";
-import contentful, { type Asset, type Entry, type RichTextContent } from "contentful";
-import { env } from "$env/dynamic/private";
+import contentful from "contentful";
+import {
+  CONTENTFUL_DELIVERY_ACCESS_TOKEN,
+  CONTENTFUL_PREVIEW_ACCESS_TOKEN,
+  CONTENTFUL_SPACE_ID,
+} from "$env/static/private";
 import { isPreview } from "sveltekit-preview-mode";
 import type { Post, PostAndMorePosts } from "schema";
 
 const client = () => {
   return contentful.createClient({
-    accessToken: isPreview()
-      ? env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
-      : env.CONTENTFUL_DELIVERY_ACCESS_TOKEN,
+    accessToken: isPreview() ? CONTENTFUL_PREVIEW_ACCESS_TOKEN : CONTENTFUL_DELIVERY_ACCESS_TOKEN,
     host: isPreview() ? "preview.contentful.com" : "cdn.contentful.com",
-    space: env.CONTENTFUL_SPACE_ID,
+    space: CONTENTFUL_SPACE_ID,
   });
 };
 
 type Author = {
-  internalName: string;
-  name: string;
-  avatar: Asset;
+  contentTypeId: "author";
+  fields: {
+    internalName: contentful.EntryFieldTypes.Text;
+    name: contentful.EntryFieldTypes.Text;
+    avatar: contentful.EntryFieldTypes.AssetLink;
+  };
 };
 
 type BlogPost = {
-  internalName: string;
-  seoFields: Record<string, unknown>;
-  slug: string;
-  author: Entry<Author>;
-  publishedDate: string;
-  title: string;
-  shortDescription: string;
-  featuredImage: Asset;
-  content: RichTextContent;
-  relatedBlogPosts: Entry<BlogPost>[];
+  contentTypeId: "pageBlogPost";
+  fields: {
+    internalName: contentful.EntryFieldTypes.Text;
+    seoFields: Record<string, unknown>;
+    slug: contentful.EntryFieldTypes.Text;
+    author: contentful.EntryFieldTypes.EntryLink<Author>;
+    publishedDate: contentful.EntryFieldTypes.Text;
+    title: contentful.EntryFieldTypes.Text;
+    shortDescription: contentful.EntryFieldTypes.Text;
+    featuredImage: contentful.EntryFieldTypes.AssetLink;
+    content: contentful.EntryFieldTypes.RichText;
+    relatedBlogPosts: contentful.EntryFieldTypes.Array<
+      contentful.EntryFieldTypes.EntryLink<BlogPost>
+    >;
+  };
 };
 
-function model_post(item: Entry<BlogPost>): Post {
+function model_post(item: contentful.Entry<BlogPost>): Post {
+  const author = item.fields.author as unknown as Author;
+  const author_avatar = author.fields.avatar as unknown as contentful.Asset;
+  const cover_image = item.fields.featuredImage as unknown as contentful.Asset;
+
   return {
-    title: item.fields.title,
-    slug: item.fields.slug,
-    date: item.fields.publishedDate,
-    excerpt: item.fields.shortDescription,
+    title: String(item.fields.title),
+    slug: String(item.fields.slug),
+    date: String(item.fields.publishedDate),
+    excerpt: String(item.fields.shortDescription),
     content: { html: documentToHtmlString(item.fields.content as Document) },
-    cover_image: { url: item.fields.featuredImage.fields.file.url },
+    cover_image: { url: String(cover_image.fields.file?.url) },
     author: {
-      name: item.fields.author.fields.name,
-      picture: { url: item.fields.author.fields.avatar.fields.file.url },
+      name: String(author.fields.name),
+      picture: { url: String(author_avatar.fields.file?.url) },
     },
   };
 }
@@ -58,7 +72,7 @@ export const get_post_and_more_posts = async (slug: string): Promise<PostAndMore
     }),
     client().getEntries<BlogPost>({
       content_type: "pageBlogPost",
-      "fields.slug[nin]": slug,
+      "fields.slug[nin]": [slug],
     }),
   ]);
 

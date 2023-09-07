@@ -34,3 +34,5 @@ vite.config.ts.timestamp-*
 
 # generated files
 packages/*/package
+packages/*/dist
+packages/sveltekit-preview-mode/README.md

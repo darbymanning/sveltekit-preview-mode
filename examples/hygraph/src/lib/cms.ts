@@ -1,17 +1,20 @@
-import { createClient, gql } from "@urql/svelte";
-import { env } from "$env/dynamic/private";
+import { createClient, gql, cacheExchange, fetchExchange } from "@urql/svelte";
+import {
+  HYGRAPH_DEV_AUTH_TOKEN,
+  HYGRAPH_PROD_AUTH_TOKEN,
+  HYGRAPH_PROJECT_API,
+} from "$env/static/private";
 import { isPreview } from "sveltekit-preview-mode";
 import type { Post, PostAndMorePosts } from "schema";
 
 const client = () => {
   return createClient({
-    url: env.HYGRAPH_PROJECT_API,
+    url: HYGRAPH_PROJECT_API,
     fetch,
+    exchanges: [cacheExchange, fetchExchange],
     fetchOptions: () => ({
       headers: {
-        authorization: `Bearer ${
-          isPreview() ? env.HYGRAPH_DEV_AUTH_TOKEN : env.HYGRAPH_PROD_AUTH_TOKEN
-        }`,
+        authorization: `Bearer ${isPreview() ? HYGRAPH_DEV_AUTH_TOKEN : HYGRAPH_PROD_AUTH_TOKEN}`,
       },
     }),
   });
