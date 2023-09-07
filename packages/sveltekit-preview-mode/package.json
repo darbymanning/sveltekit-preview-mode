@@ -16,7 +16,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "svelte-package -w",
-    "build": "vite build && svelte-package",
+    "build": "vite build && svelte-package && cp ../../README.md ./README.md",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
