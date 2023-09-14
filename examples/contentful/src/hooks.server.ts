@@ -1,5 +1,5 @@
 import type { Handle } from "@sveltejs/kit";
-import { env } from "$env/dynamic/private";
+import { PREVIEW_SECRET } from "$env/static/private";
 import previewMode from "sveltekit-preview-mode";
 
 /**
@@ -14,5 +14,5 @@ import previewMode from "sveltekit-preview-mode";
  * @see https://kit.svelte.dev/docs/modules#sveltejs-kit-hooks-sequence
  */
 export const handle: Handle = previewMode({
-  previewSecret: env.PREVIEW_SECRET,
+  previewSecret: PREVIEW_SECRET,
 });

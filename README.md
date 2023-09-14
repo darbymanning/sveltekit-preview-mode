@@ -22,11 +22,11 @@ To use SvelteKit Preview Mode, simply import it in your SvelteKit application:
 ```ts
 // src/hooks.server.ts
 import type { Handle } from "@sveltejs/kit";
-import { env } from "$env/dynamic/private";
+import { PREVIEW_SECRET } from "$env/static/private";
 import previewMode from "sveltekit-preview-mode";
 
 export const handle: Handle = previewMode({
-  previewSecret: env.PREVIEW_SECRET,
+  previewSecret: PREVIEW_SECRET,
 });
 ```
 
