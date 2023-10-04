@@ -39,7 +39,6 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
   } satisfies PreviewModeOptions;
 
   return function ({ event, resolve }) {
-    event.setHeaders({ "Cache-Control": "no-store" });
     event.locals.exitPreviewQueryParam = o.exitPreviewQueryParam;
 
     const is_exit = event.url.searchParams.has(o.exitPreviewQueryParam);
@@ -64,6 +63,7 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
 
     if (has_preview_cookie || secret_matches || isPreview()) {
       setPreview(true);
+      event.setHeaders({ "Cache-Control": "no-store" });
       event.locals.isPreview = true;
 
       if (secret_matches) {
