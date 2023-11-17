@@ -36,3 +36,5 @@ vite.config.ts.timestamp-*
 packages/*/package
 packages/*/dist
 packages/sveltekit-preview-mode/README.md
+
+.vercel
