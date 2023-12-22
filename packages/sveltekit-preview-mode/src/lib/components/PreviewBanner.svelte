@@ -1,18 +1,17 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { isPreview } from "../";
 
   let exit_link: string;
 
-	$: {
-		const url = new URL($page.url);
-		url.searchParams.set($page.data.exitPreviewQueryParam, 'true');
-		exit_link = url.toString();
-	}
+  $: {
+    const url = new URL($page.url);
+    url.searchParams.set($page.data.exitPreviewQueryParam, "true");
+    exit_link = url.toString();
+  }
 </script>
 
-{#if isPreview()}
-  <div class="preview-banner" role="dialog">
+{#if $page.data?.isPreview}
+  <div role="dialog" aria-modal="false" class="preview-banner">
     This page is a preview.
     <a rel="external" href={exit_link}>Click here</a>
     to exit preview mode.

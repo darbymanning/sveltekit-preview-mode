@@ -1,5 +1,4 @@
-import { dev } from "$app/environment";
-import { get, writable } from "svelte/store";
+import { building, dev } from "$app/environment";
 import type { Handle } from "@sveltejs/kit";
 import type { CookieSerializeOptions } from "cookie";
 export { default as PreviewBanner } from "./components/PreviewBanner.svelte";
@@ -39,6 +38,9 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
   } satisfies PreviewModeOptions;
 
   return function ({ event, resolve }) {
+    // Cannot use preview mode with static site generation
+    if (building) return resolve(event);
+
     event.locals.exitPreviewQueryParam = o.exitPreviewQueryParam;
 
     const is_exit = event.url.searchParams.has(o.exitPreviewQueryParam);
@@ -46,7 +48,7 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
     const has_preview_cookie = event.cookies.get(o.cookieName) === "true";
 
     if (is_exit) {
-      setPreview(false);
+      event.locals.isPreview = false;
 
       // remove exit-preview query param from url
       event.url.searchParams.delete(o.exitPreviewQueryParam);
@@ -61,8 +63,7 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
       });
     }
 
-    if (has_preview_cookie || secret_matches || isPreview()) {
-      setPreview(true);
+    if (has_preview_cookie || secret_matches) {
       event.setHeaders({ "Cache-Control": "no-store" });
       event.locals.isPreview = true;
 
@@ -86,8 +87,3 @@ export default function previewMode(options?: PreviewModeOptions): Handle {
     return resolve(event);
   };
 }
-
-const store = writable(false);
-
-export const setPreview = store.set;
-export const isPreview = () => get(store);
