@@ -4,17 +4,16 @@ import {
   HYGRAPH_PROD_AUTH_TOKEN,
   HYGRAPH_PROJECT_API,
 } from "$env/static/private";
-import { isPreview } from "sveltekit-preview-mode";
 import type { Post, PostAndMorePosts } from "schema";
 
-const client = () => {
+const client = (isPreview = false) => {
   return createClient({
     url: HYGRAPH_PROJECT_API,
     fetch,
     exchanges: [cacheExchange, fetchExchange],
     fetchOptions: () => ({
       headers: {
-        authorization: `Bearer ${isPreview() ? HYGRAPH_DEV_AUTH_TOKEN : HYGRAPH_PROD_AUTH_TOKEN}`,
+        authorization: `Bearer ${isPreview ? HYGRAPH_DEV_AUTH_TOKEN : HYGRAPH_PROD_AUTH_TOKEN}`,
       },
     }),
   });
@@ -49,7 +48,10 @@ const PostFragment = gql`
   ${AuthorFragment}
 `;
 
-export const get_post_and_more_posts = async (slug: string): Promise<PostAndMorePosts> => {
+export const get_post_and_more_posts = async (
+  slug: string,
+  isPreview = false,
+): Promise<PostAndMorePosts> => {
   const QUERY = gql`
     query Post($stage: Stage!, $slug: String!) {
       post(where: { slug: $slug }, stage: $stage) {
@@ -65,15 +67,15 @@ export const get_post_and_more_posts = async (slug: string): Promise<PostAndMore
 
   const variables = {
     slug,
-    stage: isPreview() ? "DRAFT" : "PUBLISHED",
+    stage: isPreview ? "DRAFT" : "PUBLISHED",
   };
 
-  const req = await client().query(QUERY, variables).toPromise();
+  const req = await client(isPreview).query(QUERY, variables).toPromise();
 
   return req.data;
 };
 
-export const get_posts = async (): Promise<Post[]> => {
+export const get_posts = async (isPreview = false): Promise<Post[]> => {
   const QUERY = gql`
     query Posts($stage: Stage!) {
       posts(stage: $stage) {
@@ -85,10 +87,10 @@ export const get_posts = async (): Promise<Post[]> => {
   `;
 
   const variables = {
-    stage: isPreview() ? "DRAFT" : "PUBLISHED",
+    stage: isPreview ? "DRAFT" : "PUBLISHED",
   };
 
-  const req = await client().query(QUERY, variables).toPromise();
+  const req = await client(isPreview).query(QUERY, variables).toPromise();
 
   return req.data.posts;
 };

@@ -6,13 +6,12 @@ import {
   CONTENTFUL_PREVIEW_ACCESS_TOKEN,
   CONTENTFUL_SPACE_ID,
 } from "$env/static/private";
-import { isPreview } from "sveltekit-preview-mode";
 import type { Post, PostAndMorePosts } from "schema";
 
-const client = () => {
+const client = (isPreview = false) => {
   return contentful.createClient({
-    accessToken: isPreview() ? CONTENTFUL_PREVIEW_ACCESS_TOKEN : CONTENTFUL_DELIVERY_ACCESS_TOKEN,
-    host: isPreview() ? "preview.contentful.com" : "cdn.contentful.com",
+    accessToken: isPreview ? CONTENTFUL_PREVIEW_ACCESS_TOKEN : CONTENTFUL_DELIVERY_ACCESS_TOKEN,
+    host: isPreview ? "preview.contentful.com" : "cdn.contentful.com",
     space: CONTENTFUL_SPACE_ID,
   });
 };
@@ -63,14 +62,17 @@ function model_post(item: contentful.Entry<BlogPost>): Post {
   };
 }
 
-export const get_post_and_more_posts = async (slug: string): Promise<PostAndMorePosts> => {
+export const get_post_and_more_posts = async (
+  slug: string,
+  isPreview = false,
+): Promise<PostAndMorePosts> => {
   const [post, more_posts] = await Promise.all([
-    client().getEntries<BlogPost>({
+    client(isPreview).getEntries<BlogPost>({
       content_type: "pageBlogPost",
       "fields.slug": slug,
       limit: 1,
     }),
-    client().getEntries<BlogPost>({
+    client(isPreview).getEntries<BlogPost>({
       content_type: "pageBlogPost",
       "fields.slug[nin]": [slug],
     }),
@@ -82,8 +84,8 @@ export const get_post_and_more_posts = async (slug: string): Promise<PostAndMore
   };
 };
 
-export const get_posts = async (): Promise<Post[]> => {
-  const { items } = await client().getEntries<BlogPost>({ content_type: "pageBlogPost" });
+export const get_posts = async (isPreview = false): Promise<Post[]> => {
+  const { items } = await client(isPreview).getEntries<BlogPost>({ content_type: "pageBlogPost" });
   return items.map(model_post);
 };
 
