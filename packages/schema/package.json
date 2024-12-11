@@ -1,4 +1,4 @@
 {
-  "name": "schema",
-  "main": "./index.ts"
+	"name": "schema",
+	"main": "./index.ts"
 }
