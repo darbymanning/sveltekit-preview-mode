@@ -2,7 +2,7 @@
 	"name": "hygraph",
 	"version": "0.1.0",
 	"scripts": {
-		"dev": "vite dev --port 4000 --open",
+		"dev": "vite dev --port 4001 --open",
 		"build": "vite build",
 		"package": "vite package",
 		"preview": "vite preview",

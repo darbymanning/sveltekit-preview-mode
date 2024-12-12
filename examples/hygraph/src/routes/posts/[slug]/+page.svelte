@@ -1,14 +1,10 @@
 <script lang="ts">
 	import { Author, Date, MorePosts } from 'ui';
-	import type { PageData } from './$types';
 
-	interface Props {
-		data: PageData;
-	}
+	let { data } = $props();
 
-	let { data }: Props = $props();
-	let { author, content, cover_image, date, title } = $derived(data.post);
-	let more_posts = $derived(data.more_posts);
+	const { author, content, cover_image, date, title } = $derived(data.post);
+	const more_posts = $derived(data.more_posts);
 </script>
 
 <header>
