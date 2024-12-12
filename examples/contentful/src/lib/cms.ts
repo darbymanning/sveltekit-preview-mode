@@ -1,6 +1,6 @@
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import type { Document } from '@contentful/rich-text-types';
-import contentful from 'contentful';
+import * as contentful from 'contentful';
 import {
 	CONTENTFUL_DELIVERY_ACCESS_TOKEN,
 	CONTENTFUL_PREVIEW_ACCESS_TOKEN,

@@ -1,11 +1,23 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"pipeline": {
+	"globalEnv": [
+		"CONTENTFUL_DELIVERY_ACCESS_TOKEN",
+		"CONTENTFUL_PREVIEW_ACCESS_TOKEN",
+		"CONTENTFUL_SPACE_ID",
+		"PREVIEW_SECRET",
+		"HYGRAPH_DEV_AUTH_TOKEN",
+		"HYGRAPH_PROD_AUTH_TOKEN",
+		"HYGRAPH_PROJECT_API"
+	],
+	"tasks": {
 		"build": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["prepare", "^build"],
 			"outputs": [".svelte-kit/**", ".vercel/**"]
 		},
 		"lint": {},
+		"prepare": {
+			"outputs": [".svelte-kit/**"]
+		},
 		"dev": {
 			"cache": false,
 			"persistent": true
