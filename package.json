@@ -1,18 +1,19 @@
 {
-	"private": true,
-	"scripts": {
-		"build": "turbo run build",
-		"dev": "turbo run dev",
-		"lint": "turbo run lint",
-		"check": "turbo run check",
-		"format": "prettier --write ."
-	},
-	"devDependencies": {
-		"eslint": "^9.7.0",
-		"prettier": "^3.4.1",
-		"prettier-plugin-svelte": "^3.3.2",
-		"turbo": "^1.10.13"
-	},
-	"packageManager": "pnpm@8.10.5",
-	"license": "ICS"
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "check": "turbo run check",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "9.16.0",
+    "prettier": "3.4.2",
+    "prettier-plugin-svelte": "3.3.2",
+    "turbo": "2.3.3"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "license": "ICS",
+  "name": "sveltekit-preview-mode"
 }

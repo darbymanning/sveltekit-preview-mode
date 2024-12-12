@@ -1,6 +1,6 @@
 import { building, dev } from '$app/environment';
 import { type Handle } from '@sveltejs/kit';
-import type { CookieSerializeOptions } from 'cookie';
+import type { SerializeOptions } from 'cookie';
 export { default as PreviewBanner } from './components/PreviewBanner.svelte';
 
 declare global {
@@ -16,7 +16,7 @@ declare global {
 interface PreviewModeOptions {
 	previewSecret: string;
 	cookieName?: string;
-	cookieOpts?: CookieSerializeOptions;
+	cookieOpts?: SerializeOptions;
 	exitPreviewQueryParam?: string;
 	secretTokenQueryParam?: string;
 }

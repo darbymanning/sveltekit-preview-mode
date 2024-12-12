@@ -12,9 +12,6 @@ const config = {
 		alias: {
 			'sveltekit-preview-mode': '../../packages/sveltekit-preview-mode/src/lib'
 		},
-		env: {
-			dir: '../../'
-		},
 		adapter: adapter()
 	}
 };
