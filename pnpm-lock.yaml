@@ -67,7 +67,7 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0(eslint@9.16.0)
       eslint-plugin-svelte:
-        specifier: ^2.36.0
+        specifier: ^2.45.1
         version: 2.46.1(eslint@9.16.0)(svelte@5.11.0)
       globals:
         specifier: ^15.0.0
@@ -137,7 +137,7 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0(eslint@9.16.0)
       eslint-plugin-svelte:
-        specifier: ^2.36.0
+        specifier: ^2.45.1
         version: 2.46.1(eslint@9.16.0)(svelte@5.11.0)
       globals:
         specifier: ^15.0.0
@@ -808,10 +808,6 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: true
 
-  /@jridgewell/sourcemap-codec@1.4.15:
-    resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
-    dev: true
-
   /@jridgewell/sourcemap-codec@1.5.0:
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
     dev: true
@@ -820,7 +816,7 @@ packages:
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
     dev: true
 
   /@mapbox/node-pre-gyp@2.0.0-rc.0:
@@ -833,7 +829,7 @@ packages:
       https-proxy-agent: 7.0.6
       node-fetch: 2.7.0
       nopt: 8.0.0
-      semver: 7.5.4
+      semver: 7.6.3
       tar: 7.4.3
     transitivePeerDependencies:
       - encoding
