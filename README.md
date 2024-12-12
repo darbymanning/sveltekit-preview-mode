@@ -21,12 +21,12 @@ To use SvelteKit Preview Mode, simply import it in your SvelteKit application:
 
 ```ts
 // src/hooks.server.ts
-import type { Handle } from "@sveltejs/kit";
-import { PREVIEW_SECRET } from "$env/static/private";
-import previewMode from "sveltekit-preview-mode";
+import type { Handle } from '@sveltejs/kit';
+import { PREVIEW_SECRET } from '$env/static/private';
+import previewMode from 'sveltekit-preview-mode';
 
 export const handle: Handle = previewMode({
-  previewSecret: PREVIEW_SECRET,
+	previewSecret: PREVIEW_SECRET
 });
 ```
 
@@ -36,31 +36,32 @@ In order to share the preview status in the client, you'll need to add this to `
 
 ```ts
 // src/routes/+layout.server.ts
-import type { LayoutServerLoad } from "./$types";
+import type { LayoutServerLoad } from './$types';
 
 /**
  * Return the `exitPreviewQueryParam` and `isPreview` values so that they can be referenced in client-side code.
  */
 export const load = (({ locals: { exitPreviewQueryParam, isPreview } }) => {
-  return {
-    exitPreviewQueryParam,
-    isPreview,
-  };
+	return {
+		exitPreviewQueryParam,
+		isPreview
+	};
 }) satisfies LayoutServerLoad;
 ```
 
-And then in `+layout.ts` we need to update the store to hold the preview status:
+And then in `+layout.ts` you will need to pass the server state to the client:
 
 ```ts
 // src/routes/+layout.ts
-import { setPreview } from "sveltekit-preview-mode";
-import type { LayoutLoad } from "./$types";
+import type { LayoutLoad } from './$types';
 
 /**
- * Call `setPreview` with the `isPreview` value so that the `isPreview` value can be referenced in client-side code.
+ * Get isPreview returned from server load and return in client load so `isPreview` value can be referenced in client-side code.
  */
 export const load = (({ data: { isPreview } }) => {
-  setPreview(isPreview);
+	return {
+		isPreview
+	};
 }) satisfies LayoutLoad;
 ```
 
@@ -71,13 +72,13 @@ To display a banner when preview mode is enabled, import the `PreviewMode` banne
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
-  import { PreviewBanner } from "sveltekit-preview-mode";
+	import { PreviewBanner } from 'sveltekit-preview-mode';
 </script>
 
 <PreviewBanner />
 ```
 
-You can now retrieve the preview status by importing the `isPreview` function, and call it to retrieve the current preview status.
+You can retrieve the preview status by checking the global page store. `$page.data.isPreview`
 
 ### Enabling Preview Mode
 
@@ -98,11 +99,11 @@ The `previewMode` handle function has a few options that can be set:
 
 ```ts
 interface PreviewModeOptions {
-  previewSecret: string;
-  cookieName?: string;
-  cookieOpts?: CookieSerializeOptions;
-  exitPreviewQueryParam?: string;
-  secretTokenQueryParam?: string;
+	previewSecret: string;
+	cookieName?: string;
+	cookieOpts?: CookieSerializeOptions;
+	exitPreviewQueryParam?: string;
+	secretTokenQueryParam?: string;
 }
 ```
 
@@ -114,6 +115,29 @@ interface PreviewModeOptions {
 | `cookieOpts?` | [CookieSerializeOptions](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/98fc6ab64752d9227eeb75b0b5a6f645b1db587b/types/cookie/index.d.ts#L14-L111) | [🔗](https://github.com/darbymanning/sveltekit-preview-mode/blob/main/packages/sveltekit-preview-mode/src/lib/index.ts#L32-L38) | Options for the cookie we create. |
 | `exitPreviewQueryParam?` | `string` | `exit-preview` | The query param that should be present to exit preview mode. |
 | `secretTokenQueryParam?` | `string` | `secret` | The query param that should be used to enter preview mode. |
+
+## Static Site Generation (SSG)
+
+`sveltekit-preview-mode` mode is reliant on having a server to analyze the request and serve different content based on query params and cookies of the incoming request. Sveltekit does not support static site generation on pages that access cookies or url query params. Due to this, during build `sveltekit-preview-mode` is turned off.
+
+If you would like to take advantage of prerendering while still using `sveltekit-preview-mode` I would suggest creating a copy of the prerendered route with a new routeId `/preview/[slug]` that is dynamic and redirecting back to the static route if not in preview mode.
+
+```ts
+// src/routes/preview/[slug]/+page.server.ts
+import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
+
+export const prerender = false;
+/**
+ * Return the `exitPreviewQueryParam` and `isPreview` values so that they can be referenced in client-side code.
+ */
+export const load = (({ params, locals: { isPreview } }) => {
+	if (!isPreview) throw redirect(302, `/${params.slug}`);
+	return {
+		isPreview
+	};
+}) satisfies LayoutServerLoad;
+```
 
 ## Contributing
 
