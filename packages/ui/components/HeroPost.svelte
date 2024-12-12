@@ -8,8 +8,8 @@
 
 	let { post }: Props = $props();
 
-	let { author, cover_image, date, excerpt, title } = $derived(post);
-	let href = $derived(`/posts/${post.slug}`);
+	const { author, cover_image, date, excerpt, title } = $derived(post);
+	const href = $derived(`/posts/${post.slug}`);
 </script>
 
 <article>

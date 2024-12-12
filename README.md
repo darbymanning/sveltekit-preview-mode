@@ -36,33 +36,15 @@ In order to share the preview status in the client, you'll need to add this to `
 
 ```ts
 // src/routes/+layout.server.ts
-import type { LayoutServerLoad } from './$types';
-
 /**
  * Return the `exitPreviewQueryParam` and `isPreview` values so that they can be referenced in client-side code.
  */
-export const load = (({ locals: { exitPreviewQueryParam, isPreview } }) => {
+export async function load({ locals }) {
 	return {
-		exitPreviewQueryParam,
-		isPreview
+		exitPreviewQueryParam: locals.exitPreviewQueryParam,
+		isPreview: locals.isPreview
 	};
-}) satisfies LayoutServerLoad;
-```
-
-And then in `+layout.ts` you will need to pass the server state to the client:
-
-```ts
-// src/routes/+layout.ts
-import type { LayoutLoad } from './$types';
-
-/**
- * Get isPreview returned from server load and return in client load so `isPreview` value can be referenced in client-side code.
- */
-export const load = (({ data: { isPreview } }) => {
-	return {
-		isPreview
-	};
-}) satisfies LayoutLoad;
+}
 ```
 
 ### Displaying Preview Status
@@ -124,19 +106,19 @@ If you would like to take advantage of prerendering while still using `sveltekit
 
 ```ts
 // src/routes/preview/[slug]/+page.server.ts
-import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 export const prerender = false;
 /**
  * Return the `exitPreviewQueryParam` and `isPreview` values so that they can be referenced in client-side code.
  */
-export const load = (({ params, locals: { isPreview } }) => {
-	if (!isPreview) throw redirect(302, `/${params.slug}`);
+export async function load({ params, locals: { isPreview } }) {
+	if (!isPreview) redirect(302, `/${params.slug}`);
+
 	return {
 		isPreview
 	};
-}) satisfies LayoutServerLoad;
+}
 ```
 
 ## Contributing

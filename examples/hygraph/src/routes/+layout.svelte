@@ -1,17 +1,14 @@
 <script lang="ts">
 	import { PreviewBanner } from 'sveltekit-preview-mode';
 	import { Footer } from 'ui';
-	interface Props {
-		children?: import('svelte').Snippet;
-	}
 
-	let { children }: Props = $props();
+	let { children } = $props();
 </script>
 
 <PreviewBanner />
 
 <main>
-	{@render children?.()}
+	{@render children()}
 </main>
 
 <Footer />

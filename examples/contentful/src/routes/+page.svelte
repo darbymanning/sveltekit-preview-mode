@@ -1,15 +1,10 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { HeroPost, MorePosts } from 'ui';
 
-	interface Props {
-		data: PageData;
-	}
+	let { data } = $props();
 
-	let { data }: Props = $props();
-
-	let hero_post = $derived(data.posts[0]);
-	let more_posts = $derived(data.posts.slice(1));
+	const hero_post = $derived(data.posts[0]);
+	const more_posts = $derived(data.posts.slice(1));
 </script>
 
 <svelte:head>

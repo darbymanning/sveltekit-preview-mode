@@ -1,11 +1,9 @@
-import type { LayoutServerLoad } from './$types';
-
 /**
  * Return the `exitPreviewQueryParam` and `isPreview` values so that they can be referenced in client-side code.
  */
-export const load = (({ locals: { exitPreviewQueryParam, isPreview } }) => {
+export async function load({ locals }) {
 	return {
-		exitPreviewQueryParam,
-		isPreview
+		exitPreviewQueryParam: locals.exitPreviewQueryParam,
+		isPreview: locals.isPreview
 	};
-}) satisfies LayoutServerLoad;
+}
